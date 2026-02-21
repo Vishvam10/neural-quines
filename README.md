@@ -8,7 +8,7 @@ As [Wikipedia](https://en.wikipedia.org/wiki/Quine_(computing)) puts it, a **qui
 
 #### Jacobian
 
-Initially, I modeled the whole thing as a **regression problem** with multiple outputs. The idea was simple: treat the network as a function $F_\theta(z)$ and try to make it output its own flattened parameters $\theta$:
+Initially, I modeled the whole thing as a **regression problem** with multiple outputs. The idea was simple : treat the WHOLE neural network as a function $F_\theta(z)$ and try to make it output its own flattened parameters $\theta$:
 
 $$
 F(\theta) - \theta = 0
@@ -27,13 +27,11 @@ J = \frac{\partial F(\theta)}{\partial \theta}, \quad
 \theta \gets \theta - (J - I)^{-1} \big(F(\theta) - \theta\big)
 $$
 
-This approach is mathematically neat as it gives an exact fixed-point iteration - but in practice there are several problems
+This approach is mathematically neat, as it provides an exact fixed-point iteration — but in practice, there were several problems that I encountered later 🫠 (see [APPENDIX](#appendix--problems-with-the-naive-jacobian-approach)). As a result, I went for a non-Jacobian approach.
 
-#### Non Jacobian
+#### Non-Jacobian
 
-Apparently, this topic has been explored wayyy before [Neural Network Quine, 2018](https://arxiv.org/abs/1803.05859) (should've read this first 😭)
-
-The 2018 paper proposes a clever alternative : **make the network weights queryable**. Instead of treating the problem as generic regression:
+Apparently, this topic was explored wayyy back in [Neural Network Quine, 2018](https://arxiv.org/abs/1803.05859) (I really should have read this first 😭). This paper proposes a clever alternative : **make the network weights queryable**. Instead of treating the problem as generic regression:
 
 - Each input encodes which weight is being queried (usually via a one-hot vector) :
   
@@ -44,12 +42,9 @@ $$
 
 #### Improvements
 
-Even with queryable inputs, the zero-quine problem remains. To bypass it, I followed [Evan Fletcher’s blog](https://evanfletcher42.com/2022/10/31/neural-quines/) 
-(should've read this before too 😭 ... it's pretty good):
+Even with queryable inputs, the zero-quine problem remains. To bypass it, I followed [Evan Fletcher’s blog](https://evanfletcher42.com/2022/10/31/neural-quines/) (should've read this before too 😭 ... it's pretty good):
 
 > We can forcibly avoid the zero quine by adding a parameter-free normalization layer after the trained dense layer. Both instance normalization and batch normalization (with all learned & running parameters disabled – no extra weights!) produce imperfect, but non-trivial, quines with relatively low error.
-
-Heatmaps of **actual vs predicted weights per layer** (`l1`, `l2`, `l3`) are also generated to see the differences. 
 
 ### How to run
 
@@ -72,7 +67,6 @@ cd nnquine/non_jacobian
 python train.py
 python evaluate.py
 ```
-
 
 ### APPENDIX : Problems with the naive Jacobian approach
 
