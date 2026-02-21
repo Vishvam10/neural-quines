@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import matplotlib.pyplot as plt
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
@@ -9,69 +10,85 @@ device = "cpu"
 from nnquine.jacobi.model import Quine, set_params, flatten_params
 
 ################################################################################
-# Setup
+# SETUP
 ################################################################################
 
 model = Quine(alpha=0.25).to(device)
-z_fixed = torch.randn(1, 8)
+input_probe = torch.randn(1, 8)
 
 P = sum(p.numel() for p in model.parameters())
 print("Total parameters : ", P)
 
-
 def F(theta_vec):
     set_params(model, theta_vec)
-    return model(z_fixed).view(-1)
-
+    return model(input_probe).view(-1)
 
 def g(theta_vec):
     return F(theta_vec) - theta_vec
 
-
 theta = flatten_params(model).detach().clone().requires_grad_(True)
-z_fixed = theta.view(1, -1)[:, :8]
 
+# Derived from theta to ensure correct slice
+input_probe = theta.view(1, -1)[:, :8]
 
 max_iters = 100
 tol = 1e-16
 
+residual_norms = []
+
 print("\nRunning Newton solver ...\n")
 
 for it in range(max_iters):
-    g_val = g(theta).detach()
-    norm = torch.norm(g_val).item()
+    with torch.no_grad():
+        g_val = g(theta).detach()
+        norm = torch.norm(g_val).item()
+        residual_norms.append(norm)
+    
     print(f"Iter {it:02d} | ||g|| = {norm:.6e}")
 
     if norm < tol:
         print("Converged")
         break
 
+    # Compute Jacobian and solve linear update
     J = torch.autograd.functional.jacobian(F, theta)
     A = J - torch.eye(P, dtype=J.dtype)
-    
-    # print("cond(A) =", torch.linalg.cond(A).item())
 
     delta = torch.linalg.solve(A, g_val)
     theta = (theta - delta).detach().requires_grad_(True)
 
-
 # Finalize model
 set_params(model, theta.detach())
-final_out = model(z_fixed).view(-1).detach()
+final_out = model(input_probe).view(-1).detach()
 final_theta = flatten_params(model).detach()
-
 diff = final_out - final_theta
+
 print("\nFinal ||difference|| : ", torch.norm(diff).item())
 
-
 ################################################################################
-# Save everything
+# SAVE PROGRESS DATA
 ################################################################################
 
 torch.save({
     "model_state": model.state_dict(),
-    "z_fixed": z_fixed,
-    "final_diff_norm": torch.norm(diff).item()
+    "input_probe": input_probe,
+    "final_diff_norm": torch.norm(diff).item(),
+    "residual_norms": residual_norms
 }, "jacobi.pth")
 
 print("\nModel saved to jacobi.pth")
+
+################################################################################
+# PLOT RESIDUALS
+################################################################################
+
+plt.figure(figsize=(6, 4))
+plt.plot(residual_norms)
+plt.yscale("log")
+plt.title("Newton Residual Norm ||f(θ) - θ|| vs Iteration")
+plt.xlabel("Iteration")
+plt.ylabel("Residual Norm (log scale)")
+plt.grid(True, linestyle="--", alpha=0.4)
+plt.savefig("jacobi_residuals.png", dpi=300)
+print("Saved residual plot as jacobi_residuals.png")
+plt.show()
