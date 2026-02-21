@@ -1,7 +1,6 @@
-import torch
-import torch.nn as nn
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import torch
 
 from nnquine.non_jacobian.model import Quine, flatten_params
 
@@ -31,23 +30,23 @@ with torch.no_grad():
 # Hard‑coded Catppuccin Frappe palette (hex colors) :contentReference[oaicite:1]{index=1}
 FRAPPE_HEX = {
     "rosewater": "#f2d5cf",
-    "flamingo":  "#eebebe",
-    "pink":      "#f4b8e4",
-    "mauve":     "#ca9ee6",
-    "red":       "#e78284",
-    "maroon":    "#ea999c",
-    "peach":     "#ef9f76",
-    "yellow":    "#e5c890",
-    "green":     "#a6d189",
-    "teal":      "#81c8be",
-    "sky":       "#99d1db",
-    "sapphire":  "#85c1dc",
-    "blue":      "#8caaee",
-    "lavender":  "#babbf1",
-    "text":      "#c6d0f5",
-    "base":      "#303446",
-    "mantle":    "#292c3c",
-    "crust":     "#232634",
+    "flamingo": "#eebebe",
+    "pink": "#f4b8e4",
+    "mauve": "#ca9ee6",
+    "red": "#e78284",
+    "maroon": "#ea999c",
+    "peach": "#ef9f76",
+    "yellow": "#e5c890",
+    "green": "#a6d189",
+    "teal": "#81c8be",
+    "sky": "#99d1db",
+    "sapphire": "#85c1dc",
+    "blue": "#8caaee",
+    "lavender": "#babbf1",
+    "text": "#c6d0f5",
+    "base": "#303446",
+    "mantle": "#292c3c",
+    "crust": "#232634",
 }
 
 plt.style.use("dark_background")
@@ -61,11 +60,12 @@ cmap = plt.get_cmap("coolwarm")
 # HEATMAP UTILS
 ##############################################################################
 
+
 def plot_comparison(actual, pred, title, vmin=None, vmax=None):
     """Plot three heatmaps: actual, predicted, and their difference."""
-    
+
     diff = pred - actual
-    
+
     fig, axs = plt.subplots(1, 3, figsize=(18, 5))
     fig.suptitle(title, color=FRAPPE_HEX["text"])
 
@@ -73,9 +73,9 @@ def plot_comparison(actual, pred, title, vmin=None, vmax=None):
         absmax = max(np.abs(actual).max(), np.abs(pred).max())
         vmin, vmax = -absmax, absmax
 
-    im0 = axs[0].imshow(actual, cmap=cmap, vmin=vmin, vmax=vmax)
+    axs[0].imshow(actual, cmap=cmap, vmin=vmin, vmax=vmax)
     axs[0].set_title("Actual", color=FRAPPE_HEX["sky"])
-    im1 = axs[1].imshow(pred, cmap=cmap, vmin=vmin, vmax=vmax)
+    axs[1].imshow(pred, cmap=cmap, vmin=vmin, vmax=vmax)
     axs[1].set_title("Predicted", color=FRAPPE_HEX["sky"])
     im2 = axs[2].imshow(diff, cmap=cmap, vmin=-absmax, vmax=absmax)
     axs[2].set_title("Difference", color=FRAPPE_HEX["red"])
@@ -89,6 +89,7 @@ def plot_comparison(actual, pred, title, vmin=None, vmax=None):
     corr = np.corrcoef(actual.flatten(), pred.flatten())[0, 1]
     print(f"Correlation (actual vs pred) for {title} = {corr:.4f}")
 
+
 ##############################################################################
 # COMPARE LAYER WEIGHTS
 ##############################################################################
@@ -96,10 +97,10 @@ def plot_comparison(actual, pred, title, vmin=None, vmax=None):
 with torch.no_grad():
     for layer_name in ["l1", "l2", "l3"]:
         W_act = getattr(model, layer_name).weight.detach().cpu().numpy()
-        
+
         # predicted full theta
         pred_full = pred_theta.cpu().numpy().reshape(-1)
-        
+
         # extract corresponding slice for this layer
         start = 0
         for name, param in model.named_parameters():

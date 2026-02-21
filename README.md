@@ -68,6 +68,15 @@ python train.py
 python evaluate.py
 ```
 
+If you wish to contribute, kindly lint and format the code before raising a PR :
+
+```bash
+# Kindly lint and format the code if you plan to contribute
+ruff check --config pyproject.toml
+ruff check --select I --fix . --config pyproject.toml
+ruff format --config pyproject.toml
+```
+
 ### APPENDIX : Problems with the naive Jacobian approach
 
 1. **The zero-quine problem**  

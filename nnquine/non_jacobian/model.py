@@ -23,6 +23,7 @@ from https://evanfletcher42.com/2022/10/31/neural-quines/ :
 Hence, we add the nn.InstanceNorm1d between each layer
 """
 
+
 class Quine(nn.Module):
     def __init__(self, alpha=0.25):
         super().__init__()
@@ -31,7 +32,6 @@ class Quine(nn.Module):
         self.l1 = nn.Linear(8, 20)
         self.l2 = nn.Linear(20, 20)
         self.l3 = nn.Linear(20, 20)
-        
 
         self.norm1 = nn.InstanceNorm1d(20, affine=False)
         self.norm2 = nn.InstanceNorm1d(20, affine=False)
@@ -68,5 +68,5 @@ def set_params(model, theta_vec):
     with torch.no_grad():
         for p in model.parameters():
             num = p.numel()
-            p.copy_(theta_vec[idx:idx + num].view_as(p))
+            p.copy_(theta_vec[idx : idx + num].view_as(p))
             idx += num

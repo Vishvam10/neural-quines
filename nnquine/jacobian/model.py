@@ -3,6 +3,7 @@ import torch.nn as nn
 
 torch.set_default_dtype(torch.float64)
 
+
 class Quine(nn.Module):
     def __init__(self, alpha=0.25):
         super().__init__()
@@ -36,5 +37,5 @@ def set_params(model, theta_vec):
     with torch.no_grad():
         for p in model.parameters():
             num = p.numel()
-            p.copy_(theta_vec[idx:idx+num].view_as(p))
+            p.copy_(theta_vec[idx : idx + num].view_as(p))
             idx += num

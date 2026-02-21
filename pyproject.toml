@@ -1,17 +1,72 @@
 [project]
-name = "testing"
+name = "neural-quine"
 version = "0.1.0"
-description = "Add your description here"
+description = "Neural networks that output their own weights"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "datasets>=4.5.0",
     "matplotlib>=3.10.8",
-    "scikit-learn>=1.8.0",
-    "sentence-transformers>=5.2.3",
     "torch>=2.10.0",
     "tqdm>=4.67.3",
-    "transformers>=5.2.0",
-    "tree-sitter>=0.25.2",
-    "tree-sitter-python>=0.25.0",
 ]
+
+authors = [
+    { name = "Vishvam", email = "s.vishvam1025@gmail.com" },    
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.2",
+]
+
+[tool.ruff]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "*_pb2*.py*",         # gRPC auto-generated files
+]
+
+line-length = 80
+indent-width = 4
+target-version = "py314"
+
+[tool.ruff.lint]
+exclude = ["*_pb2*.py"]
+select = ["E4", "E7", "E9", "F"]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = false
+max-doc-length = 80
+
+[tool.ruff.format]
+exclude = ["*_pb2*.py"]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

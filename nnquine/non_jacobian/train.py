@@ -1,14 +1,14 @@
-import torch
 import matplotlib.pyplot as plt
-
+import torch
 from tqdm import tqdm
+
+from nnquine.non_jacobian.model import Quine, flatten_params, set_params
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
 
 device = "cpu"
 
-from nnquine.non_jacobian.model import Quine, set_params, flatten_params
 
 ##############################################################################
 # SETUP
@@ -59,11 +59,14 @@ print("\nFinal loss :", loss.item())
 # SAVE
 ##############################################################################
 
-torch.save({
-    "model_state": model.state_dict(),
-    "theta": theta.detach(),
-    "input_probe": input_probe
-}, "non_jacobian.pth")
+torch.save(
+    {
+        "model_state": model.state_dict(),
+        "theta": theta.detach(),
+        "input_probe": input_probe,
+    },
+    "non_jacobian.pth",
+)
 
 print("\nModel saved to non_jacobian.pth")
 

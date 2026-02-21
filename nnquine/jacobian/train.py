@@ -1,15 +1,14 @@
-import torch
-import torch.nn as nn
 import matplotlib.pyplot as plt
-
+import torch
 from tqdm import tqdm
+
+from nnquine.jacobian.model import Quine, flatten_params, set_params
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
 
 device = "cpu"
 
-from nnquine.jacobian.model import Quine, set_params, flatten_params
 
 ################################################################################
 # SETUP
@@ -21,12 +20,15 @@ fixed_input = torch.randn(1, 8)
 P = sum(p.numel() for p in model.parameters())
 print("Total parameters : ", P)
 
+
 def F(theta_vec):
     set_params(model, theta_vec)
     return model(fixed_input).view(-1)
 
+
 def g(theta_vec):
     return F(theta_vec) - theta_vec
+
 
 theta = flatten_params(model).detach().clone().requires_grad_(True)
 fixed_input = torch.randn(1, 8)
@@ -43,7 +45,7 @@ for it in tqdm(range(max_steps), desc="Newton Progress"):
         g_val = g(theta).detach()
         norm = torch.norm(g_val).item()
         residual_norms.append(norm)
-    
+
     tqdm.write(f"Step {it:02d} | ||g|| = {norm:.6e}")
 
     if norm < tol:
@@ -69,12 +71,15 @@ print("\nFinal ||difference|| : ", torch.norm(diff).item())
 # SAVE PROGRESS DATA
 ################################################################################
 
-torch.save({
-    "model_state": model.state_dict(),
-    "fixed_input": fixed_input,
-    "final_diff_norm": torch.norm(diff).item(),
-    "residual_norms": residual_norms
-}, "jacobian.pth")
+torch.save(
+    {
+        "model_state": model.state_dict(),
+        "fixed_input": fixed_input,
+        "final_diff_norm": torch.norm(diff).item(),
+        "residual_norms": residual_norms,
+    },
+    "jacobian.pth",
+)
 
 print("\nModel saved to jacobian.pth")
 
