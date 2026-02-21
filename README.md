@@ -1,6 +1,6 @@
 ## Neural Quines
 
-As [Wikipedia](https://en.wikipedia.org/wiki/Quine_(computing)) puts it, a **quine** is a computer program that takes no input and produces a copy of its own source code as its only output. A **neural quine** is the analogous concept for neural networks — a network that outputs its own weights.
+As [Wikipedia](https://en.wikipedia.org/wiki/Quine_(computing)) puts it, a **quine** is a computer program that takes no input and produces a copy of its own source code as its only output. A **neural quine** is the analogous concept for neural networks — a network that outputs its own weights. Something like this :
 
 ![Neural Quine](nnquine.png)
 
