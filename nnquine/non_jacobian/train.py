@@ -8,7 +8,7 @@ torch.manual_seed(0)
 
 device = "cpu"
 
-from nnquine.non_jacobi.model import Quine, set_params, flatten_params
+from nnquine.non_jacobian.model import Quine, set_params, flatten_params
 
 ##############################################################################
 # SETUP
@@ -63,9 +63,9 @@ torch.save({
     "model_state": model.state_dict(),
     "theta": theta.detach(),
     "input_probe": input_probe
-}, "non_jacobi.pth")
+}, "non_jacobian.pth")
 
-print("\nModel saved to non_jacobi.pth")
+print("\nModel saved to non_jacobian.pth")
 
 ##############################################################################
 # PLOT LOSS
@@ -79,6 +79,6 @@ plt.xlabel("Iteration")
 plt.ylabel("Loss (log scale)")
 plt.grid(True, linestyle="--", alpha=0.4)
 
-plt.savefig("non_jacobi_training_loss.png", dpi=300)
-print("Saved loss plot as non_jacobi_training_loss.png")
+plt.savefig("non_jacobian_training_loss.png", dpi=300)
+print("Saved loss plot as non_jacobian_training_loss.png")
 plt.show()

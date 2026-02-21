@@ -9,29 +9,27 @@ torch.manual_seed(0)
 
 device = "cpu"
 
-from nnquine.jacobi.model import Quine, set_params, flatten_params
+from nnquine.jacobian.model import Quine, set_params, flatten_params
 
 ################################################################################
 # SETUP
 ################################################################################
 
 model = Quine(alpha=0.25).to(device)
-input_probe = torch.randn(1, 8)
+fixed_input = torch.randn(1, 8)
 
 P = sum(p.numel() for p in model.parameters())
 print("Total parameters : ", P)
 
 def F(theta_vec):
     set_params(model, theta_vec)
-    return model(input_probe).view(-1)
+    return model(fixed_input).view(-1)
 
 def g(theta_vec):
     return F(theta_vec) - theta_vec
 
 theta = flatten_params(model).detach().clone().requires_grad_(True)
-
-# Derived from theta to ensure correct slice
-input_probe = theta.view(1, -1)[:, :8]
+fixed_input = torch.randn(1, 8)
 
 max_steps = 100
 tol = 1e-16
@@ -61,7 +59,7 @@ for it in tqdm(range(max_steps), desc="Newton Progress"):
 
 # Finalize model
 set_params(model, theta.detach())
-final_out = model(input_probe).view(-1).detach()
+final_out = model(fixed_input).view(-1).detach()
 final_theta = flatten_params(model).detach()
 diff = final_out - final_theta
 
@@ -73,12 +71,12 @@ print("\nFinal ||difference|| : ", torch.norm(diff).item())
 
 torch.save({
     "model_state": model.state_dict(),
-    "input_probe": input_probe,
+    "fixed_input": fixed_input,
     "final_diff_norm": torch.norm(diff).item(),
     "residual_norms": residual_norms
-}, "jacobi.pth")
+}, "jacobian.pth")
 
-print("\nModel saved to jacobi.pth")
+print("\nModel saved to jacobian.pth")
 
 ################################################################################
 # PLOT RESIDUALS
@@ -91,6 +89,6 @@ plt.title("Newton Residual Norm ||f(θ) - θ|| vs Iteration")
 plt.xlabel("Iteration")
 plt.ylabel("Residual Norm (log scale)")
 plt.grid(True, linestyle="--", alpha=0.4)
-plt.savefig("jacobi_residuals.png", dpi=300)
-print("Saved residual plot as jacobi_residuals.png")
+plt.savefig("jacobian_residuals.png", dpi=300)
+print("Saved residual plot as jacobian_residuals.png")
 plt.show()
