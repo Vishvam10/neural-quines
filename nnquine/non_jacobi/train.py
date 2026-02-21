@@ -1,6 +1,7 @@
 import torch
-import torch.nn as nn
 import matplotlib.pyplot as plt
+
+from tqdm import tqdm
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
@@ -34,7 +35,7 @@ loss_list = []
 
 num_steps = 200000
 
-for step in range(num_steps):
+for step in tqdm(range(num_steps), desc="Training Progress", unit="step"):
     optimizer.zero_grad()
 
     set_params(model, theta)
@@ -48,7 +49,7 @@ for step in range(num_steps):
     loss_list.append(loss.item())
 
     if step % 500 == 0:
-        print(f"Step {step:04d} | Loss = {loss.item():.3e}")
+        tqdm.write(f"Step {step:04d} | Loss = {loss.item():.3e}")
 
 set_params(model, theta.detach())
 

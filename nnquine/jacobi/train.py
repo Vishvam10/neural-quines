@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 
+from tqdm import tqdm
+
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
 
@@ -31,20 +33,20 @@ theta = flatten_params(model).detach().clone().requires_grad_(True)
 # Derived from theta to ensure correct slice
 input_probe = theta.view(1, -1)[:, :8]
 
-max_iters = 100
+max_steps = 100
 tol = 1e-16
 
 residual_norms = []
 
 print("\nRunning Newton solver ...\n")
 
-for it in range(max_iters):
+for it in tqdm(range(max_steps), desc="Newton Progress"):
     with torch.no_grad():
         g_val = g(theta).detach()
         norm = torch.norm(g_val).item()
         residual_norms.append(norm)
     
-    print(f"Iter {it:02d} | ||g|| = {norm:.6e}")
+    tqdm.write(f"Step {it:02d} | ||g|| = {norm:.6e}")
 
     if norm < tol:
         print("Converged")
