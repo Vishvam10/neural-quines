@@ -6,7 +6,7 @@ torch.manual_seed(0)
 
 device = "cpu"
 
-from .model import Quine, set_params, flatten_params
+from nnquine.jacobi.model import Quine, set_params, flatten_params
 
 ################################################################################
 # Setup
@@ -16,7 +16,7 @@ model = Quine(alpha=0.25).to(device)
 z_fixed = torch.randn(1, 8)
 
 P = sum(p.numel() for p in model.parameters())
-print("Total parameters:", P)
+print("Total parameters : ", P)
 
 
 def F(theta_vec):
@@ -61,7 +61,7 @@ final_out = model(z_fixed).view(-1).detach()
 final_theta = flatten_params(model).detach()
 
 diff = final_out - final_theta
-print("\nFinal ||difference||:", torch.norm(diff).item())
+print("\nFinal ||difference|| : ", torch.norm(diff).item())
 
 
 ################################################################################
@@ -72,6 +72,6 @@ torch.save({
     "model_state": model.state_dict(),
     "z_fixed": z_fixed,
     "final_diff_norm": torch.norm(diff).item()
-}, "quine_fixed.pth")
+}, "jacobi.pth")
 
-print("\nModel saved to quine_fixed.pth")
+print("\nModel saved to jacobi.pth")

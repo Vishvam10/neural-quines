@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .model import Quine, flatten_params
+from nnquine.jacobi.model import Quine, flatten_params
 
 torch.set_default_dtype(torch.float64)
 device = "cpu"
@@ -12,7 +12,7 @@ device = "cpu"
 # LOAD MODEL
 ################################################################################
 
-checkpoint = torch.load("quine_fixed.pth", map_location=device)
+checkpoint = torch.load("jacobi.pth", map_location=device)
 
 model = Quine(alpha=0.25).to(device)
 model.load_state_dict(checkpoint["model_state"])
@@ -28,17 +28,17 @@ with torch.no_grad():
     W = model.l1.weight
     b = model.l1.bias
 
-print("First layer weight stats:")
+print("First layer weight stats : ")
 print("Mean : ", W.mean().item())
 print("Std  : ", W.std().item())
 print("Max  : ", W.abs().max().item())
 
-print("\nFirst layer bias stats: ")
+print("\nFirst layer bias stats : ")
 print("Mean : ", b.mean().item())
 print("Std  : ", b.std().item())
 print("Max  : ", b.abs().max().item())
 
-print("\nFirst few weight rows:")
+print("\nFirst few weight rows : ")
 print(W[:5])
 
 ################################################################################
@@ -48,7 +48,7 @@ print(W[:5])
 z_fixed = checkpoint["z_fixed"]
 
 out_fixed = model(z_fixed).view(-1).detach()
-print("\nFixed-point diff (training z):")
+print("\nFixed-point diff (training z) : ")
 print("||f(z_fixed) - theta|| =", torch.norm(out_fixed - theta).item())
 
 ################################################################################
@@ -67,7 +67,7 @@ outs = torch.stack(outs)
 
 diffs = torch.norm(outs - theta, dim=1)
 
-print("\nAcross random inputs:")
+print("\nAcross random inputs : ")
 print("Mean diff : ", diffs.mean().item())
 print("Max diff  : ", diffs.max().item())
 print("Min diff  : ", diffs.min().item())
