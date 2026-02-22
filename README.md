@@ -126,13 +126,13 @@ $$
 h \in \mathbb{R}^n
 $$
 
-Mean :
+#### Mean
 
 $$
 \mu = \frac{1}{n} \sum_{k=1}^{n} h_k
 $$
 
-Variance :
+#### Variance
 
 $$
 \sigma^2 = \frac{1}{n} \sum_{k=1}^{n} (h_k - \mu)^2
@@ -144,29 +144,29 @@ $$
 s = \sqrt{\sigma^2 + \epsilon}
 $$
 
-Normalized output is :
+The normalized output is
 
 $$
 \hat{h}_i = \frac{h_i - \mu}{s}
 $$
 
-We compute the Jacobian :
+We compute the Jacobian
 
 $$
 J_{ij} = \frac{\partial \hat{h}_i}{\partial h_j}
 $$
 
 
-**Step 1 : Derivative of the Mean**
+#### Step 1: Derivative of the Mean
 
 $$
 \frac{\partial \mu}{\partial h_j} = \frac{1}{n}
 $$
 
 
-**Step 2 : Rewrite the Variance**
+#### Step 2: Rewrite the Variance
 
-Using this identity :
+Using the identity
 
 $$
 \sigma^2
@@ -189,8 +189,7 @@ $$
 $$
 
 
-**Step 3 : Derivative of $s$**
-
+#### Step 3: Derivative of $s$
 
 $$
 \frac{\partial s}{\partial h_j}
@@ -206,9 +205,7 @@ $$
 $$
 
 
-**Step 4 : Differentiate the Normalized Output**
-
-
+#### Step 4: Differentiate the Normalized Output
 
 $$
 \frac{\partial \hat{h}_i}{\partial h_j}
@@ -220,7 +217,7 @@ $$
 \frac{\partial s}{\partial h_j}
 $$
 
-Compute the first derivative :
+Compute the first derivative:
 
 $$
 \frac{\partial (h_i - \mu)}{\partial h_j}
@@ -230,7 +227,7 @@ $$
 \frac{1}{n}
 $$
 
-So the first term becomes :
+So the first term becomes
 
 $$
 \frac{1}{s}
@@ -241,7 +238,7 @@ $$
 \right)
 $$
 
-Now substitute the derivative of $s$ :
+Now substitute the derivative of $s$:
 
 $$
 \frac{h_i - \mu}{s^2}
@@ -252,10 +249,9 @@ $$
 $$
 
 
-### Loss Function :
+#### Final Expression
 
 $$
-\boxed{
 J_{ij}
 =
 \frac{1}{s}
@@ -266,11 +262,10 @@ J_{ij}
 \right)
 -
 \frac{(h_i - \mu)(h_j - \mu)}{n s^3}
-}
 $$
 
 
-**Now, for case : $h = 0$**
+#### Special Case: $h = 0$
 
 If
 
@@ -281,13 +276,20 @@ $$
 then
 
 $$
-\mu = 0, \sigma^2 = 0, s = \sqrt{\epsilon}
+\mu = 0
 $$
 
-The second term vanishes, giving :
+$$
+\sigma^2 = 0
+$$
 
 $$
-\boxed{
+s = \sqrt{\epsilon}
+$$
+
+The second term vanishes, giving
+
+$$
 J
 =
 \frac{1}{\sqrt{\epsilon}}
@@ -297,7 +299,6 @@ I
 \frac{1}{n}
 \mathbf{1}\mathbf{1}^T
 \right)
-}
 $$
 
 where
