@@ -175,11 +175,7 @@ $$
 Differentiate with respect to $h_j$:
 
 $$
-\frac{\partial \sigma^2}{\partial h_j}
-=
-\frac{2}{n} h_j
--
-2 \mu \frac{\partial \mu}{\partial h_j}
+\frac{\partial \sigma^2}{\partial h_j}=\frac{2}{n} h_j-2 \mu \frac{\partial \mu}{\partial h_j}
 $$
 
 Since
@@ -191,88 +187,45 @@ $$
 we get
 
 $$
-\frac{\partial \sigma^2}{\partial h_j}
-=
-\frac{2}{n} h_j
--
-\frac{2\mu}{n}
-=
-\frac{2}{n}(h_j - \mu)
+\frac{\partial \sigma^2}{\partial h_j}=\frac{2}{n} h_j-\frac{2\mu}{n}=\frac{2}{n}(h_j - \mu)
 $$
 
 #### Step 3: Derivative of $s$
 
 $$
-\frac{\partial s}{\partial h_j}
-=
-\frac{1}{2s}
-\frac{\partial \sigma^2}{\partial h_j}
-=
-\frac{1}{2s}
-\cdot
-\frac{2}{n}(h_j - \mu)
-=
-\frac{h_j - \mu}{n s}
+\frac{\partial s}{\partial h_j}=\frac{1}{2s}\frac{\partial \sigma^2}{\partial h_j}=\frac{1}{2s}\cdot\frac{2}{n}(h_j - \mu)=\frac{h_j - \mu}{n s}
 $$
 
 
 #### Step 4: Differentiate the Normalized Output
 
 $$
-\frac{\partial \hat{h}_i}{\partial h_j}
-=
-\frac{1}{s}
-\frac{\partial (h_i - \mu)}{\partial h_j}
--
-\frac{h_i - \mu}{s^2}
-\frac{\partial s}{\partial h_j}
+\frac{\partial \hat{h}_i}{\partial h_j}=\frac{1}{s}\frac{\partial (h_i - \mu)}{\partial h_j}-\frac{h_i - \mu}{s^2}\frac{\partial s}{\partial h_j}
 $$
 
 Compute the first derivative:
 
 $$
-\frac{\partial (h_i - \mu)}{\partial h_j}
-=
-\delta_{ij}
--
-\frac{1}{n}
+\frac{\partial (h_i - \mu)}{\partial h_j}=\delta_{ij}-\frac{1}{n}
 $$
 
 So the first term becomes
 
 $$
-\frac{1}{s}
-\left(
-\delta_{ij}
--
-\frac{1}{n}
-\right)
+\frac{1}{s}\left(\delta_{ij}-\frac{1}{n}\right)
 $$
 
 Now substitute the derivative of $s$:
 
 $$
-\frac{h_i - \mu}{s^2}
-\cdot
-\frac{h_j - \mu}{n s}
-=
-\frac{(h_i - \mu)(h_j - \mu)}{n s^3}
+\frac{h_i - \mu}{s^2}\cdot\frac{h_j - \mu}{n s}=\frac{(h_i - \mu)(h_j - \mu)}{n s^3}
 $$
 
 
 #### Final Expression
 
 $$
-J_{ij}
-=
-\frac{1}{s}
-\left(
-\delta_{ij}
--
-\frac{1}{n}
-\right)
--
-\frac{(h_i - \mu)(h_j - \mu)}{n s^3}
+J_{ij}=\frac{1}{s}\left(\delta_{ij}-\frac{1}{n}\right)-\frac{(h_i - \mu)(h_j - \mu)}{n s^3}
 $$
 
 
@@ -301,23 +254,13 @@ $$
 The second term vanishes, giving
 
 $$
-J
-=
-\frac{1}{\sqrt{\epsilon}}
-\left(
-I
--
-\frac{1}{n}
-\mathbf{1}\mathbf{1}^T
-\right)
+J=\frac{1}{\sqrt{\epsilon}}\left(I-\frac{1}{n}\mathbf{1}\mathbf{1}^T\right)
 $$
 
 where
 
 $$
-\mathbf{1}
-=
-(1,1,\dots,1)^T
+\mathbf{1}=(1,1,\dots,1)^T
 $$
 
 Now this is not 0 so when the weights are updated, we get non-zero weights
