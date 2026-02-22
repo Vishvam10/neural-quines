@@ -8,7 +8,7 @@ from catppuccin.extras.matplotlib import get_colormap_from_list
 
 from nnquine.jacobian.model import Quine, flatten_params
 
-mpl.style.use(catppuccin.PALETTE.macchiato.identifier)
+mpl.style.use(catppuccin.PALETTE.mocha.identifier)
 
 torch.set_default_dtype(torch.float64)
 device = "cpu"
@@ -31,7 +31,7 @@ with torch.no_grad():
 
 
 cmap = get_colormap_from_list(
-    catppuccin.PALETTE.macchiato.identifier,
+    catppuccin.PALETTE.mocha.identifier,
    ["red", "surface2", "blue"]
 )
 
