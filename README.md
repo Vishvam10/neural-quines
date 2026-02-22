@@ -8,13 +8,13 @@ As [Wikipedia](https://en.wikipedia.org/wiki/Quine_(computing)) puts it, a **qui
 
 #### Jacobian
 
-Initially, I modeled the whole thing as a **regression problem** with multiple outputs. The idea was simple : treat the WHOLE neural network as a function $F_\theta(z)$ and try to make it output its own flattened parameters $\theta$:
+Initially, I modeled the whole thing as a **regression problem** with multiple outputs. The idea was simple: treat the WHOLE neural network as a function $F_\theta(z)$ and try to make it output its own flattened parameters $\theta$:
 
 $$
 F(\theta) - \theta = 0
 $$
 
-The loss could then be written as
+The loss could then be written as:
 
 $$
 \mathcal{L} = \| F(\theta) - \theta \|
@@ -27,7 +27,27 @@ J = \frac{\partial F(\theta)}{\partial \theta}, \quad
 \theta \gets \theta - (J - I)^{-1} \big(F(\theta) - \theta\big)
 $$
 
-This approach is mathematically neat, as it provides an exact fixed-point iteration — but in practice, there were several problems that I encountered later 🫠 (see [APPENDIX](#appendix--problems-with-the-naive-jacobian-approach)). As a result, I went for a non-Jacobian approach.
+
+If we introduce a **scaling factor** $\alpha$ for the quine (to control the magnitude of self-replication), the loss becomes:
+
+$$
+\mathcal{L} = \| \alpha F(\theta) - \theta \|
+$$
+
+The Jacobian now includes the scaling :
+
+$$
+J = \frac{\partial (\alpha F(\theta))}{\partial \theta} = \alpha \frac{\partial F(\theta)}{\partial \theta}
+$$
+
+And the Newton-style update is updated accordingly:
+
+$$
+\theta \gets \theta - (J - I)^{-1} \big(\alpha F(\theta) - \theta \big)
+$$
+
+
+This allows you to control the "strength" of the quine with $\alpha$ while still using the Jacobian for Newton updates. This approach is mathematically neat, as it provides an exact fixed-point iteration — but in practice, there were several problems that I encountered later 🫠 (see [APPENDIX](#appendix--problems-with-the-naive-jacobian-approach)). As a result, I went for a non-Jacobian approach.
 
 #### Non-Jacobian
 
