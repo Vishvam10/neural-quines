@@ -169,11 +169,7 @@ $$
 Using the identity
 
 $$
-\sigma^2
-=
-\frac{1}{n} \sum_{k=1}^n h_k^2
--
-\mu^2
+\sigma^2 = \frac{1}{n} \sum_{k=1}^{n} h_k^2 - \mu^2
 $$
 
 Differentiate with respect to $h_j$:
@@ -183,11 +179,26 @@ $$
 =
 \frac{2}{n} h_j
 -
-2 \mu \frac{1}{n}
+2 \mu \frac{\partial \mu}{\partial h_j}
+$$
+
+Since
+
+$$
+\frac{\partial \mu}{\partial h_j} = \frac{1}{n}
+$$
+
+we get
+
+$$
+\frac{\partial \sigma^2}{\partial h_j}
+=
+\frac{2}{n} h_j
+-
+\frac{2\mu}{n}
 =
 \frac{2}{n}(h_j - \mu)
 $$
-
 
 #### Step 3: Derivative of $s$
 
