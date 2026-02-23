@@ -61,15 +61,13 @@ $$
 F_\theta(i, j) \approx W_{ij}
 $$
 
-That would mean:
+That would mean :
 
 - We feed an index $(i, j)$  
 - The model returns a single parameter $W_{ij}$  
 - We must loop over all indices to reconstruct $\theta$
 
-This formulation describes an **indexed neural quine**.
-
-In that case, the full parameter vector would be reconstructed as:
+This formulation describes an **indexed neural quine**. In that case, the full parameter vector would be reconstructed as:
 
 $$
 \theta = \{ F_\theta(i) \}_{i=1}^{P}
@@ -80,7 +78,7 @@ which requires $P$ forward passes.
 
 **What I Actually Built (Non-Indexed Version)**
 
-Instead, our model is defined as:
+Instead, my model is defined as:
 
 $$
 F_\theta : \mathbb{R}^d \rightarrow \mathbb{R}^P
@@ -108,7 +106,6 @@ This means a **single forward pass** generates the entire parameter vector.
 
 **The Fixed-Point Equation**
 
-
 Training solves the nonlinear fixed-point condition:
 
 $$
@@ -133,8 +130,6 @@ Where:
 - $P$ = total number of parameters  
 
 So a small latent vector $z \in \mathbb{R}^d$ generates the entire parameter vector $\theta \in \mathbb{R}^P$. That's why, after training the model, we save the `input_probes` as well
-
-
 
 #### Improvements
 
