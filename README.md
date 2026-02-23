@@ -51,13 +51,89 @@ This allows you to control the "strength" of the quine with $\alpha$ while still
 
 #### Non-Jacobian
 
-Apparently, this topic was explored wayyy back in [Neural Network Quine, 2018](https://arxiv.org/abs/1803.05859) (I really should have read this first 😭). This paper proposes a clever alternative : **make the network weights queryable**. Instead of treating the problem as generic regression:
+Apparently, this topic was explored wayyy back in [Neural Network Quine, 2018](https://arxiv.org/abs/1803.05859) (I really should have read this first 😭). This paper proposes a clever alternative : **make the network weights queryable**
 
-- Each input encodes which weight is being queried (usually via a one-hot vector) :
-  
+**What The Paper Suggestss (Indexed Version)**
+
+Model does something like this :
+
 $$
-\text{input}[i,j] \implies W_{ij} \approx F_\theta(\text{input})
+F_\theta(i, j) \approx W_{ij}
 $$
+
+That would mean:
+
+- We feed an index $(i, j)$  
+- The model returns a single parameter $W_{ij}$  
+- We must loop over all indices to reconstruct $\theta$
+
+This formulation describes an **indexed neural quine**.
+
+In that case, the full parameter vector would be reconstructed as:
+
+$$
+\theta = \{ F_\theta(i) \}_{i=1}^{P}
+$$
+
+which requires $P$ forward passes.
+
+
+**What I Actually Built (Non-Indexed Version)**
+
+Instead, our model is defined as:
+
+$$
+F_\theta : \mathbb{R}^d \rightarrow \mathbb{R}^P
+$$
+
+Where :
+
+- $d = 8$ (input dimension)
+- $P$ = total number of parameters
+- $\theta \in \mathbb{R}^P$ is the flattened parameter vector
+
+We choose a fixed probe vector :
+
+$$
+z \in \mathbb{R}^d
+$$
+
+And train the network so that :
+
+$$
+F_\theta(z) \approx \theta
+$$
+
+This means a **single forward pass** generates the entire parameter vector.
+
+**The Fixed-Point Equation**
+
+
+Training solves the nonlinear fixed-point condition:
+
+$$
+\theta^* = F_{\theta^*}(z)
+$$
+
+This means the parameters define a function that, when evaluated at a specific input $z$, outputs those same parameters.
+
+**Input Dimension vs Parameter Dimension**
+
+The input does **not** need to be size $P$.
+
+The model learns this mapping :
+
+$$
+\mathbb{R}^d \rightarrow \mathbb{R}^P
+$$
+
+Where:
+
+- $d$ = input dimension  
+- $P$ = total number of parameters  
+
+So a small latent vector $z \in \mathbb{R}^d$ generates the entire parameter vector $\theta \in \mathbb{R}^P$. That's why, after training the model, we save the `input_probes` as well
+
 
 
 #### Improvements
