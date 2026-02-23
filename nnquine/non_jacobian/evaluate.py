@@ -83,4 +83,4 @@ with torch.no_grad():
             start += param.numel()
 
         if W_pred is not None:
-            plot_comparison(W_act, W_pred, f"Layer {layer_name.capitalize()} weights")
+            plot_comparison(W_act, W_pred, "Queried Weights")

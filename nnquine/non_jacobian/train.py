@@ -25,7 +25,7 @@ print("Total parameters : ", theta.numel())
 
 # Choose optimizer
 optimizer = torch.optim.RMSprop([theta], lr=1e-3)
-print("Optimizer:", optimizer)
+print("Optimizer : ", optimizer)
 
 loss_list = []
 
@@ -53,7 +53,7 @@ for step in tqdm(range(num_steps), desc="Training Progress", unit="step"):
 
 set_params(model, theta.detach())
 
-print("\nFinal loss :", loss.item())
+print("\nFinal loss : ", loss.item())
 
 ##############################################################################
 # SAVE
