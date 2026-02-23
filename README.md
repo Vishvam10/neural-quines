@@ -67,7 +67,7 @@ That would mean :
 - The model returns a single parameter $W_{ij}$  
 - We must loop over all indices to reconstruct $\theta$
 
-This formulation describes an **indexed neural quine**. In that case, the full parameter vector would be reconstructed as:
+This formulation describes an **indexed neural quine**. In that case, the full parameter vector would be reconstructed as :
 
 $$
 \theta = \{ F_\theta(i) \}_{i=1}^{P}
@@ -334,4 +334,4 @@ $$
 \mathbf{1}=(1,1,\dots,1)^T
 $$
 
-Now this is not 0 so when the weights are updated, we get non-zero weights
+Now this is not 0. So, when the weights are updated, we get non-zero weights
