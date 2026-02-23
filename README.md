@@ -131,7 +131,7 @@ Where:
 
 So a small latent vector $z \in \mathbb{R}^d$ generates the entire parameter vector $\theta \in \mathbb{R}^P$. That's why, after training the model, we save the `input_probes` as well
 
-#### Improvements
+### Improvements
 
 Even with queryable inputs, the zero-quine problem remains. To bypass it, I followed [Evan Fletcher’s blog](https://evanfletcher42.com/2022/10/31/neural-quines/) (should've read this before too 😭 ... it's pretty good):
 
