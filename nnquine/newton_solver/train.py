@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import torch
 from tqdm import tqdm
 
-from nnquine.jacobian.model import Quine, flatten_params, set_params
+from nnquine.gradient_solver.model import Quine, flatten_params, set_params
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
@@ -45,6 +45,7 @@ for it in tqdm(range(max_steps), desc="Newton Progress"):
         g_val = g(theta).detach()
         norm = torch.norm(g_val).item()
         residual_norms.append(norm)
+        
 
     tqdm.write(f"Step {it:02d} | ||g|| = {norm:.6e}")
 
@@ -55,6 +56,10 @@ for it in tqdm(range(max_steps), desc="Newton Progress"):
     # Compute Jacobian and solve linear update
     J = torch.autograd.functional.jacobian(F, theta)
     A = J - torch.eye(P, dtype=J.dtype)
+
+    with torch.no_grad():
+        eigvals = torch.linalg.eigvals(J)
+        tqdm.write(f"max |eig(J_F)| : {eigvals.abs().max().item()}")
 
     delta = torch.linalg.solve(A, g_val)
     theta = (theta - delta).detach().requires_grad_(True)
@@ -78,10 +83,10 @@ torch.save(
         "final_diff_norm": torch.norm(diff).item(),
         "residual_norms": residual_norms,
     },
-    "jacobian.pth",
+    "newton_solver.pth",
 )
 
-print("\nModel saved to jacobian.pth")
+print("\nModel saved to newton_solver.pth")
 
 ################################################################################
 # PLOT RESIDUALS
@@ -94,6 +99,6 @@ plt.title("Newton Residual Norm ||f(θ) - θ|| vs Iteration")
 plt.xlabel("Iteration")
 plt.ylabel("Residual Norm (log scale)")
 plt.grid(True, linestyle="--", alpha=0.4)
-plt.savefig("jacobian_residuals.png", dpi=300)
-print("Saved residual plot as jacobian_residuals.png")
+plt.savefig("newton_solver_training_loss.png", dpi=300)
+print("Saved residual plot as newton_solver_training_loss.png")
 plt.show()

@@ -6,7 +6,7 @@ As [Wikipedia](https://en.wikipedia.org/wiki/Quine_(computing)) puts it, a **qui
 
 ### Approaches Taken
 
-#### Jacobian
+#### Newton Solver
 
 Initially, I modeled the whole thing as a **regression problem** with multiple outputs. The idea was simple: treat the WHOLE neural network as a function $F_\theta(z)$ and try to make it output its own flattened parameters $\theta$:
 
@@ -49,7 +49,7 @@ $$
 
 This allows you to control the "strength" of the quine with $\alpha$ while still using the Jacobian for Newton updates. This approach is mathematically neat, as it provides an exact fixed-point iteration : but in practice, there were several problems that I encountered later 🫠 (check the [APPENDIX](#appendix--problems-with-the-naive-jacobian-approach)). As a result, I went for a non-Jacobian approach.
 
-#### Non-Jacobian
+#### Gradient Solver
 
 Apparently, this topic was explored wayyy back in [Neural Network Quine, 2018](https://arxiv.org/abs/1803.05859) (I really should have read this first 😭). This paper proposes a clever alternative : **make the network weights queryable**
 
@@ -180,13 +180,9 @@ ruff format --config pyproject.toml
    - For a network with $P$ parameters, the Jacobian $J$ is $P \times P$.  
    - Constructing, storing, and solving linear systems with $J - I$ becomes expensive and numerically unstable for even modest networks.  
 
-3. **Single fixed input is limiting**  
-   - The network needs some input to produce an output, but using a single “dummy” input only probes a tiny slice of the network’s behavior.  
-   - This makes the reconstructed weights sensitive to the choice of input and can leave other weights poorly constrained.
-
-4. **Nonlinear interactions and ill-conditioning**  
-   - Neural quines are highly coupled : changing one weight affects multiple outputs.  
-   - Newton’s method oscillates or overcorrects when the mapping is stiff, especially with normalization layers.  
+3. **Nonlinear interactions and ill-conditioning**  
+   - Neural quines are highly coupled : changing one weight affects multiple outputs. So, Newton’s method oscillates or overcorrects
+   - So, sometimes it fails to converge
 
 
 ### APPENDIX : Proof

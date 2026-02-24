@@ -6,9 +6,9 @@ import catppuccin
 
 from catppuccin.extras.matplotlib import get_colormap_from_list
 
-from nnquine.jacobian.model import Quine, flatten_params
+from nnquine.working.model import Quine, flatten_params
 
-mpl.style.use(catppuccin.PALETTE.mocha.identifier)
+mpl.style.use(catppuccin.PALETTE.macchiato.identifier)
 
 torch.set_default_dtype(torch.float64)
 device = "cpu"
@@ -17,21 +17,21 @@ device = "cpu"
 # LOAD MODEL
 ################################################################################
 
-checkpoint = torch.load("jacobian.pth", map_location=device)
+checkpoint = torch.load("non_jacobian.pth", map_location=device)
 
 model = Quine(alpha=0.25).to(device)
 model.load_state_dict(checkpoint["model_state"])
 model.eval()
 
 theta = flatten_params(model).detach()
-fixed_input = checkpoint["fixed_input"]
+input_probe = checkpoint["input_probe"]
 
 with torch.no_grad():
-    pred_theta = model(fixed_input).view(-1).detach()
+    pred_theta = model(input_probe).view(-1).detach()
 
 
 cmap = get_colormap_from_list(
-    catppuccin.PALETTE.mocha.identifier,
+    catppuccin.PALETTE.macchiato.identifier,
    ["red", "surface2", "blue"]
 )
 
@@ -83,4 +83,4 @@ with torch.no_grad():
             start += param.numel()
 
         if W_pred is not None:
-            plot_comparison(W_act, W_pred, f"Layer {layer_name.capitalize()} weights")
+            plot_comparison(W_act, W_pred, "Queried Weights")

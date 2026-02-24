@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import torch
 from tqdm import tqdm
 
-from nnquine.non_jacobian.model import Quine, flatten_params, set_params
+from nnquine.gradient_solver.model import Quine, flatten_params, set_params
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
@@ -65,10 +65,10 @@ torch.save(
         "theta": theta.detach(),
         "input_probe": input_probe,
     },
-    "non_jacobian.pth",
+    "gradient_solver.pth",
 )
 
-print("\nModel saved to non_jacobian.pth")
+print("\nModel saved to gradient_solver.pth")
 
 ##############################################################################
 # PLOT LOSS
@@ -82,6 +82,6 @@ plt.xlabel("Iteration")
 plt.ylabel("Loss (log scale)")
 plt.grid(True, linestyle="--", alpha=0.4)
 
-plt.savefig("non_jacobian_training_loss.png", dpi=300)
-print("Saved loss plot as non_jacobian_training_loss.png")
+plt.savefig("gradient_solver_training_loss.png", dpi=300)
+print("Saved loss plot as gradient_solver_training_loss.png")
 plt.show()
