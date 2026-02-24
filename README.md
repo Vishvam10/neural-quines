@@ -192,7 +192,7 @@ $$
 is locally stable only if  
 
 $$
-\min_i \left| \lambda_i\!\left(J_F(\theta^*)\right) - 1 \right| > 0.
+\min_i \left| \lambda_i\left(J_F(\theta^*)\right) - 1 \right| > 0.
 $$
 
 Instability occurs when any eigenvalue of $J_F$ satisfies this. That's why we see unstable losses using this method :
