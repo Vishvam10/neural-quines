@@ -47,7 +47,7 @@ $$
 $$
 
 
-This allows you to control the "strength" of the quine with $\alpha$ while still using the Jacobian for Newton updates. This approach is mathematically neat, as it provides an exact fixed-point iteration : but in practice, there were several problems that I encountered later 🫠 (check the [APPENDIX](#appendix--problems-with-the-naive-jacobian-approach)). As a result, I went for a non-Jacobian approach.
+This allows you to control the "strength" of the quine with $\alpha$ while still using the Jacobian for Newton updates. This approach is mathematically neat, as it provides an exact fixed-point iteration : but in practice, there were several problems that I encountered later 🫠 (check the [APPENDIX](#appendix--problems-with-the-naive-jacobian-approach)). As a result, I went for a non-Newton approach.
 
 #### Gradient Solver
 
