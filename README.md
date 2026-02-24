@@ -182,21 +182,22 @@ ruff format --config pyproject.toml
 
 3. **Nonlinear interactions and ill-conditioning**  
    - Neural quines are highly coupled : changing one weight affects multiple outputs. So, Newton’s method oscillates or overcorrects 
-   - Newton’s method for solving the fixed-point equation  
 
-      $$
-      F(\theta) = \theta
-      $$
+Newton’s method for solving the fixed-point equation  
 
-      is locally stable only if  
+$$
+F(\theta) = \theta
+$$
 
-      $$
-      \min_i \left| \lambda_i\!\left(J_F(\theta^*)\right) - 1 \right| > 0.
-      $$
+is locally stable only if  
 
-      Instability occurs when any eigenvalue of $J_F$ satisfies this. That's why we see unstable losses using this method :
+$$
+\min_i \left| \lambda_i\!\left(J_F(\theta^*)\right) - 1 \right| > 0.
+$$
 
-      ![alt text](nnquine/newton_solver/newton_solver_training_loss.png)
+Instability occurs when any eigenvalue of $J_F$ satisfies this. That's why we see unstable losses using this method :
+
+![alt text](nnquine/newton_solver/newton_solver_training_loss.png)
 
 
 ### APPENDIX : Proof
