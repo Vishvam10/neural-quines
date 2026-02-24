@@ -1,8 +1,13 @@
-import matplotlib.pyplot as plt
 import torch
+import catppuccin
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
 from tqdm import tqdm
 
 from nnquine.gradient_solver.model import Quine, flatten_params, set_params
+
+mpl.style.use(catppuccin.PALETTE.mocha.identifier)
 
 torch.set_default_dtype(torch.float64)
 torch.manual_seed(0)
@@ -81,7 +86,8 @@ plt.title("Training Loss over Iterations")
 plt.xlabel("Iteration")
 plt.ylabel("Loss (log scale)")
 plt.grid(True, linestyle="--", alpha=0.4)
-
+plt.xticks(rotation=45)
+plt.tight_layout()
 plt.savefig("gradient_solver_training_loss.png", dpi=300)
 print("Saved loss plot as gradient_solver_training_loss.png")
 plt.show()

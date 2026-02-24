@@ -181,8 +181,23 @@ ruff format --config pyproject.toml
    - Constructing, storing, and solving linear systems with $J - I$ becomes expensive and numerically unstable for even modest networks.  
 
 3. **Nonlinear interactions and ill-conditioning**  
-   - Neural quines are highly coupled : changing one weight affects multiple outputs. So, Newton’s method oscillates or overcorrects
-   - So, sometimes it fails to converge
+   - Neural quines are highly coupled : changing one weight affects multiple outputs. So, Newton’s method oscillates or overcorrects 
+
+Newton’s method for solving the fixed-point equation  
+
+$$
+F(\theta) = \theta
+$$
+
+is locally stable only if  
+
+$$
+\min_i \left| \lambda_i\!\left(J_F(\theta^*)\right) - 1 \right| > 0.
+$$
+
+Instability occurs when any eigenvalue of $J_F$ satisfies this. That's why we see unstable losses using this method :
+
+![alt text](nnquine/newton_solver/newton_solver_training_loss.png)
 
 
 ### APPENDIX : Proof
