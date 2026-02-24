@@ -35,6 +35,8 @@ def F(theta_vec):
         param_dict[name] = theta_vec[idx:idx+num].view_as(p)
         idx += num
 
+    # Calling model(...) will ignores theta_vec, so F won't depend on theta_vec 
+    # and the Jacobian becomes zero
     return functional_call(model, param_dict, (fixed_input,)).view(-1)
 
 
