@@ -170,7 +170,7 @@ ruff check --select I --fix . --config pyproject.toml
 ruff format --config pyproject.toml
 ```
 
-### APPENDIX : Problems with the naive Jacobian approach
+### APPENDIX : Problems with the naive Newton approach
 
 1. **The zero-quine problem**  
    - If all weights are zero, the network trivially satisfies $F(0) = 0$.  
@@ -182,22 +182,21 @@ ruff format --config pyproject.toml
 
 3. **Nonlinear interactions and ill-conditioning**  
    - Neural quines are highly coupled : changing one weight affects multiple outputs. So, Newton’s method oscillates or overcorrects 
+   - Newton’s method for solving the fixed-point equation  
 
-Newton’s method for solving the fixed-point equation  
+      $$
+      F(\theta) = \theta
+      $$
 
-$$
-F(\theta) = \theta
-$$
+      is locally stable only if  
 
-is locally stable only if  
+      $$
+      \min_i \left| \lambda_i\!\left(J_F(\theta^*)\right) - 1 \right| > 0.
+      $$
 
-$$
-\min_i \left| \lambda_i\!\left(J_F(\theta^*)\right) - 1 \right| > 0.
-$$
+      Instability occurs when any eigenvalue of $J_F$ satisfies this. That's why we see unstable losses using this method :
 
-Instability occurs when any eigenvalue of $J_F$ satisfies this. That's why we see unstable losses using this method :
-
-![alt text](nnquine/newton_solver/newton_solver_training_loss.png)
+      ![alt text](nnquine/newton_solver/newton_solver_training_loss.png)
 
 
 ### APPENDIX : Proof

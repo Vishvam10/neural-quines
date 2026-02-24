@@ -45,7 +45,7 @@ def g(theta_vec):
 theta = flatten_params(model).detach().clone().requires_grad_(True)
 fixed_input = torch.randn(1, 8)
 
-# This takes more than an hour on Macbook M4 and it oscillates.So, sticking 
+# This takes more than an hour on Macbook M4 and it oscillates. So, sticking 
 # with a lower number
 # num_steps = 200000
 num_steps = 1000
